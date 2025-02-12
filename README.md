@@ -10,6 +10,9 @@ local prefixes="#pragma #define #if #else #end"
 
 This may be adjusted to support more directives by modifying the value of ```prefixes```, each matched pattern is separated by a space.
 
+#### Future updates
+- Add support for indented content inside preprocessor blocks (#if, #defined, etc.)
+
 ### Autoformatting with neovim
 
 To support autoformatting with this patch you may use [conform.nvim](https://github.com/stevearc/conform.nvim) to define a custom formatter pointing to the file. Make sure the script is given executable permissions and is in a location detectable by ```$PATH```. 
