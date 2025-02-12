@@ -18,7 +18,8 @@ function replace_all()
             sed -i "s/${prefix}/${pattern}${prefix}/g" "${file_path}"
         done
         # Replace block directives
-        sed -i -E '/#if/,/#end/s/(\S*)/\/\/#REPLACE\1/' "$file_path"
+        sed -i -E '/#if/ i // clang-format off' "$file_path"
+        sed -i -E '/#end/ a // clang-format on' "$file_path"
     done
 }
 
@@ -35,7 +36,8 @@ function re_replace_all()
             sed -i "s/${pattern}${prefix}/${prefix}/g" "${file_path}"
         done
         # Add block directives back in
-        sed -i -E 's/\/\/ *#REPLACE  //' "$file_path"
+        sed -i -E '/\/\/ clang-format off/d' "$file_path"
+        sed -i -E '/\/\/ clang-format on/d' "$file_path"
     done
 }
 
