@@ -5,13 +5,12 @@ This bash script (derived from [p-clang-format](https://github.com/MedicineYeh/p
 By default the script prevents formatting for the following directives, and will match the directive and any following characters:
 
 ```bash
-local prefixes="#pragma #define #if #else #end"
+local prefixes="#pragma #define"
 ```
 
-This may be adjusted to support more directives by modifying the value of ```prefixes```, each matched pattern is separated by a space.
+This may be adjusted to support more directives by modifying the value of ```prefixes```. Each matched pattern is separated by a space.
 
-#### Future updates
-- Add support for indented content inside preprocessor blocks (#if, #defined, etc.)
+Additionally, preprocessor conditional blocks (```#if```, ```#ifdef```, ```#else```, ```#endif```, etc.) are adjusted to ignore formatting. This means indentation of the whole block must be handled manually, unlike non-block directives which will automatically align to match scope indentation.
 
 ### Autoformatting with neovim
 

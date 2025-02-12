@@ -12,10 +12,13 @@ function replace_all()
 
     for file_path in "${file_pathes[@]}"; do
         [[ ! -r "$file_path" ]] && continue
+        # Replace all defined prefixes for single-line directives
         for prefix in "${_prefixes[@]}"; do
             # echo "s/${prefix}/${pattern}${prefix}/g"
             sed -i "s/${prefix}/${pattern}${prefix}/g" "${file_path}"
         done
+        # Replace block directives
+        sed -i -E '/#if/,/#end/s/(\S*)/\/\/#REPLACE\1/' "$file_path"
     done
 }
 
@@ -31,6 +34,8 @@ function re_replace_all()
             # echo "s/${pattern}${prefix}/${prefix}/g"
             sed -i "s/${pattern}${prefix}/${prefix}/g" "${file_path}"
         done
+        # Add block directives back in
+        sed -i -E 's/\/\/ *#REPLACE  //' "$file_path"
     done
 }
 
@@ -51,7 +56,7 @@ function main()
     local file_pathes=()
 
     # Define the keywords of pragma to be escaped from formatting
-    local prefixes="#pragma #define #if #else #end"
+    local prefixes="#pragma #define"
 
     # Find all files in the arguments
     for var in "$@"; do
