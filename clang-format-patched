@@ -18,8 +18,16 @@ function replace_all()
             sed -i "s/${prefix}/${pattern}${prefix}/g" "${file_path}"
         done
         # Replace block directives
-        sed -i -E '/#if/ i // clang-format off' "$file_path"
-        sed -i -E '/#end/ a // clang-format on' "$file_path"
+        sed -i -E \
+            '/\/\/ ALLOW FORMATTING/ {
+                N;                      # Read the next line (containing #if)
+                /#if/ b no_formatting; # If the next line is not #if, skip this block
+            }
+            /#if/ i // clang-format off
+
+            :no_formatting' "$file_path"
+
+        sed -i -E "/#end/ a // clang-format on" "$file_path"
     done
 }
 
